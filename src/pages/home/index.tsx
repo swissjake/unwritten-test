@@ -74,7 +74,7 @@ const Home = () => {
             connection and try again later.
           </p>
         </div>
-      ) : filteredCountries.length === 0 ? (
+      ) : filteredCountries.length === 0 && !loading ? (
         <div
           role="alert"
           aria-label="No results found"
