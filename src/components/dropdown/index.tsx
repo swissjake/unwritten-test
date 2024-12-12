@@ -18,7 +18,7 @@ const Dropdown = ({
 
   return (
     <div
-      className="w-[200px] bg-white mt-1 absolute rounded-lg shadow-sm"
+      className="w-[200px] bg-white mt-1 absolute z-20 rounded-lg shadow-sm"
       role="listbox"
       aria-label="Select a continent"
     >

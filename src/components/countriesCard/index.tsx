@@ -7,7 +7,7 @@ const CountriesCard = ({ country }: { country: Country }) => {
       aria-labelledby="country-name"
     >
       <div className="mb-4">
-        <div className="w-full h-[160px]">
+        <div className="w-full h-[200px]">
           <img
             src={country.flags.png}
             alt={`Flag of ${country.name.common}`}
