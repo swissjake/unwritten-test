@@ -69,10 +69,18 @@ const Home = () => {
           aria-label="Error loading countries"
           className="flex justify-center items-center text-red-500"
         >
-          <p>
+          <p className="text-2xl font-bold text-center">
             There was an error loading the countries. Please check your internet
             connection and try again later.
           </p>
+        </div>
+      ) : filteredCountries.length === 0 ? (
+        <div
+          role="alert"
+          aria-label="No results found"
+          className="flex justify-center items-center text-gray-500"
+        >
+          <p className="text-2xl font-bold text-center">No results found</p>
         </div>
       ) : (
         <InfiniteScroll
