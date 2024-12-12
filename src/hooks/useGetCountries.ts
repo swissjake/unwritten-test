@@ -11,6 +11,7 @@ export interface Country {
   flags: {
     png: string;
     svg: string;
+    common: string;
   };
 }
 
@@ -26,7 +27,7 @@ export const useGetCountries = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
+
       setCountries(data);
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -3,59 +3,93 @@ import Filter from "../../components/filter";
 import Input from "../../components/input";
 import ContainerLayout from "../../components/layout/container-layout";
 import { useGetCountries } from "../../hooks/useGetCountries";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../../components/spinner";
-import ComponentVisibility from "../../components/componentVisibility";
+
+const ITEMS_PER_PAGE = 16;
 
 const Home = () => {
   const { countries, loading } = useGetCountries();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-  const [displayedCountries, setDisplayedCountries] = useState(
-    countries.slice(0, 16)
-  );
-  const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const filteredCountries = countries.filter((country) => {
-    const matchesSearchTerm = country.name.common
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesRegion = selectedRegion
-      ? country.region === selectedRegion ||
-        (selectedRegion === "America" && country.region === "Americas")
-      : true;
-    return matchesSearchTerm && matchesRegion;
-  });
+  // Memoize filtered countries to prevent unnecessary recalculations
+  const filteredCountries = useMemo(() => {
+    return countries.filter((country) => {
+      const matchesSearchTerm = country.name.common
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesRegion = selectedRegion
+        ? country.region === selectedRegion ||
+          (selectedRegion === "America" && country.region === "Americas")
+        : true;
+      return matchesSearchTerm && matchesRegion;
+    });
+  }, [countries, searchTerm, selectedRegion]);
 
-  useEffect(() => {
-    setDisplayedCountries(filteredCountries.slice(0, page * 16));
-    setHasMore(page * 16 < filteredCountries.length);
+  // Memoize displayed countries
+  const displayedCountries = useMemo(() => {
+    return filteredCountries.slice(0, page * ITEMS_PER_PAGE);
   }, [filteredCountries, page]);
+
+  const hasMore = displayedCountries.length < filteredCountries.length;
+
+  // Reset page when search term or region changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, selectedRegion]);
 
   const fetchMoreData = () => {
     setPage((prev) => prev + 1);
   };
 
+  if (loading) {
+    return (
+      <ContainerLayout>
+        <div
+          role="status"
+          aria-label="Loading countries"
+          className="flex justify-center items-center min-h-screen"
+        >
+          <Spinner />
+        </div>
+      </ContainerLayout>
+    );
+  }
+
   return (
     <ContainerLayout>
-      <div className="flex flex-col sm:flex-row mb-12 justify-start md:justify-between md:items-center gap-10">
+      <div
+        className="flex flex-col sm:flex-row mb-12 justify-start md:justify-between md:items-center gap-10"
+        role="search"
+        aria-label="Country search and filter"
+      >
         <Input setSearchTerm={setSearchTerm} />
         <Filter setSelectedRegion={setSelectedRegion} />
       </div>
-      <ComponentVisibility isVisible={loading}>
-        <Spinner />
-      </ComponentVisibility>
+
       <InfiniteScroll
         dataLength={displayedCountries.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Spinner />}
+        loader={
+          <div role="status" aria-label="Loading more countries">
+            <Spinner />
+          </div>
+        }
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[44px]">
-          {displayedCountries.map((country, index) => (
-            <CountriesCard country={country} key={index} />
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[44px]"
+          role="region"
+          aria-label="Countries grid"
+        >
+          {displayedCountries.map((country) => (
+            <CountriesCard
+              country={country}
+              key={country.name.common} // Changed from index to unique identifier
+            />
           ))}
         </div>
       </InfiniteScroll>
