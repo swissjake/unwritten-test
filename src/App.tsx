@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Nav />
-      <div className="pt-[104px] md:pt-[128px]">
+      <div className="pt-[104px] md:pt-[128px] pb-[50px]">
         <Home />
       </div>
     </>
