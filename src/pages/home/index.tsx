@@ -45,20 +45,6 @@ const Home = () => {
     setPage((prev) => prev + 1);
   };
 
-  if (loading) {
-    return (
-      <ContainerLayout>
-        <div
-          role="status"
-          aria-label="Loading countries"
-          className="flex justify-center items-center min-h-screen"
-        >
-          <Spinner />
-        </div>
-      </ContainerLayout>
-    );
-  }
-
   return (
     <ContainerLayout>
       <div
@@ -69,30 +55,32 @@ const Home = () => {
         <Input setSearchTerm={setSearchTerm} />
         <Filter setSelectedRegion={setSelectedRegion} />
       </div>
-
-      <InfiniteScroll
-        dataLength={displayedCountries.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={
-          <div role="status" aria-label="Loading more countries">
-            <Spinner />
-          </div>
-        }
-      >
+      {loading ? (
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[44px]"
-          role="region"
-          aria-label="Countries grid"
+          role="status"
+          aria-label="Loading countries"
+          className="flex justify-center items-center "
         >
-          {displayedCountries.map((country) => (
-            <CountriesCard
-              country={country}
-              key={country.name.common} // Changed from index to unique identifier
-            />
-          ))}
+          <Spinner />
         </div>
-      </InfiniteScroll>
+      ) : (
+        <InfiniteScroll
+          dataLength={displayedCountries.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={"Loading..."}
+        >
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[44px]"
+            role="region"
+            aria-label="Countries grid"
+          >
+            {displayedCountries.map((country) => (
+              <CountriesCard country={country} key={country.name.common} />
+            ))}
+          </div>
+        </InfiniteScroll>
+      )}
     </ContainerLayout>
   );
 };
