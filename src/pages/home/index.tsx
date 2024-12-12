@@ -10,7 +10,7 @@ import Spinner from "../../components/spinner";
 const ITEMS_PER_PAGE = 16;
 
 const Home = () => {
-  const { countries, loading } = useGetCountries();
+  const { countries, loading, error } = useGetCountries();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -62,6 +62,17 @@ const Home = () => {
           className="flex justify-center items-center "
         >
           <Spinner />
+        </div>
+      ) : error ? (
+        <div
+          role="alert"
+          aria-label="Error loading countries"
+          className="flex justify-center items-center text-red-500"
+        >
+          <p>
+            There was an error loading the countries. Please check your internet
+            connection and try again later.
+          </p>
         </div>
       ) : (
         <InfiniteScroll
