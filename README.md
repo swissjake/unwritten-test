@@ -14,7 +14,7 @@ A React application that allows users to explore countries and their details.
 
 1. Clone the repository
    ```bash
-   git clone 
+   git clone https://github.com/swissjake/unwritten-test.git
    ```
 
 3. Install dependencies
