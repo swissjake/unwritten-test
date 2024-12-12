@@ -22,7 +22,7 @@ describe("useGetCountries", () => {
     const { result } = renderHook(() => useGetCountries());
 
     await waitFor(() => {
-      expect(result.current.error).toBeDefined();
+      expect(result.current.error).toBe("Failed to fetch");
     });
   });
 });

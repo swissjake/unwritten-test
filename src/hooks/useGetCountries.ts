@@ -21,6 +21,7 @@ export const useGetCountries = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCountries = async () => {
+    setLoading(true);
     try {
       const response = await fetch(import.meta.env.VITE_API_URL);
       if (!response.ok) {
