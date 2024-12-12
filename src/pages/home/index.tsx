@@ -71,7 +71,7 @@ const Home = () => {
         >
           <p className="text-2xl font-bold text-center">
             There was an error loading the countries. Please check your internet
-            connection and try again later.
+            connection and try again later. Kindly reload.
           </p>
         </div>
       ) : filteredCountries.length === 0 && !loading ? (
