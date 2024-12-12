@@ -29,6 +29,6 @@ A React application that allows users to explore countries and their details.
 To start the development server:
 
  ```bash
-   pnpm dev
+   pnpm run dev
  ```
 
