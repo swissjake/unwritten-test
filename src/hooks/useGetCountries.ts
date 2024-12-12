@@ -23,7 +23,7 @@ export const useGetCountries = () => {
   const fetchCountries = async () => {
     setLoading(true);
     try {
-      const response = await fetch(import.meta.env.VITE_API_URL);
+      const response = await fetch("https://restcountries.com/v3.1/all");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
